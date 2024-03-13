@@ -9,3 +9,6 @@ enhance/arc-image-plugin
 
 @begin
 appID D4TRJ5JH
+
+@aws
+runtime nodejs20.x
