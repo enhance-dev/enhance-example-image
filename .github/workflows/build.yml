@@ -32,7 +32,7 @@ jobs:
           begin_token: ${{ secrets.BEGIN_TOKEN }}
           begin_env_name: staging
           channel: 'main'
-          log: 'debug'
+          log: 'verbose'
 
       - name: Image Cache Warming
         run: npx @enhance/image warm --directory /public --domain https://nature-l2p.begin.app
