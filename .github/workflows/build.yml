@@ -1,0 +1,38 @@
+name: Node CI
+
+# Push tests pushes; PR tests merges
+on: [ push ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # Deploy the build
+  deploy_staging:
+    name: Deploy staging
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: staging_${{ github.repository }}
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+
+      - name: Install
+        run: npm ci
+
+      - name: Deploy to staging
+        uses: beginner-corp/actions/deploy@main
+        with:
+          begin_token: ${{ secrets.BEGIN_TOKEN }}
+          begin_env_name: staging
+          channel: 'main'
+
+      - name: Image Cache Warming
+        run: npx @enhance/image warm --directory /public --domain https://nature-l2p.begin.app
+
